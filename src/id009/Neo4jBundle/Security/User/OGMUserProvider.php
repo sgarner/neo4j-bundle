@@ -54,8 +54,8 @@ class OGMUserProvider implements UserProviderInterface
         if (!$id = $user->getId())
         	throw new \InvalidArgumentException('You cannot refresh user that does not contain an identifier');
 
-        if (null === $refreshedUser = $this->repository->find($id))
-        	throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
+        if (!$refreshedUser = $this->repository->find($id))
+        	throw new UsernameNotFoundException(sprintf('User %s does not exist.', $user->getId()));
 
         return $refreshedUser;
 	}
