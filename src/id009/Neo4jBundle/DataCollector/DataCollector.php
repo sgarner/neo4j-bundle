@@ -19,7 +19,7 @@ class DataCollector extends BaseDataCollector
 		$this->events[] = $event;
 	}
 
-	public function collect(Request $request, Response $response, Exception $exception = null)
+	public function collect(Request $request, Response $response, \Exception $exception = null)
 	{
 		return $this->data['events'] = array_map('json_encode', $this->events);
 	}
