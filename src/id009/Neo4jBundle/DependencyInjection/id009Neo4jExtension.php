@@ -72,6 +72,11 @@ class id009Neo4jExtension extends Extension
         $managerServiceName = sprintf('id009_neo4j.%s_entity_manager', $manager['name']);
 
         $managerDefinition = new Definition('%id009_neo4j.entity_manager.class%', array(new Reference($configServiceName)));
+        $managerDefinition->addMethodCall('setCache', array(
+            $connection['cache']['driver'],
+            $connection['cache']['service'] ? new Reference($connection['cache']['service']) : null,
+            $connection['cache']['ttl']
+        ));
         $container->setDefinition($managerServiceName, $managerDefinition);
 
         if ($manager['name'] == $defaultManager){

@@ -5,6 +5,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use HireVoice\Neo4j\EntityManager as BaseEntityManager;
 use HireVoice\Neo4j\Configuration;
 use HireVoice\Neo4j\Exception;
+use Everyman\Neo4j\Cache;
 
 /**
  * Entity Manager
@@ -26,4 +27,25 @@ class EntityManager extends BaseEntityManager
 			}
 		}
 	}
+
+    public function setCache($driver, $service, $cacheTimeout = null)
+    {
+        switch ($driver) {
+            case 'variable':
+                $cache = new \Everyman\Neo4j\Cache\Variable();
+                break;
+            case 'memcache':
+                $cache = new \Everyman\Neo4j\Cache\Memcache($service);
+                break;
+            case 'memcached':
+                $cache = new \Everyman\Neo4j\Cache\Memcached($service);
+                break;
+            case 'null':
+            default:
+                $cache = new \Everyman\Neo4j\Cache\Null();
+                break;
+        }
+
+        $this->getClient()->getEntityCache()->setCache($cache, $cacheTimeout);
+    }
 }
