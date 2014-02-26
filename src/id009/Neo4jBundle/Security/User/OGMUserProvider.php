@@ -35,7 +35,9 @@ class OGMUserProvider implements UserProviderInterface
 
 	public function loadUserByUsername($username)
 	{
-		if (null !== $this->property){
+		if (\method_exists($this->repository, 'loadUserByUsername')){
+			$user = $this->repository->loadUserByUsername($username);
+		} elseif (null !== $this->property){
 			$user = $this->repository->findOneBy(array($this->property => $username));
 		} else {
 			$user = $this->repository->findOneByUsername($username);
